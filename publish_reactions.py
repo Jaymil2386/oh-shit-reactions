@@ -119,7 +119,10 @@ def build():
             name = readable_title(gif.stem)
             short_rel = gif.relative_to(src).as_posix()
             unique_key = hashlib.sha1(short_rel.encode("utf8")).hexdigest()[:7]
-            content_hash = hashlib.sha1(gif.read_bytes()).hexdigest()[:9]
+            # Include conversion settings in the URL fingerprint. Otherwise TTS/GitHub
+            # may reuse old cached frame JPEGs after a quality/FPS change.
+            fingerprint = f"{fps}|{max_seconds}|{width}|{quality}".encode("utf-8")
+            content_hash = hashlib.sha1(gif.read_bytes() + b"\0" + fingerprint).hexdigest()[:9]
             ident = clean_slug(gif.stem) + "-" + unique_key
             folder_name = ident + "-" + content_hash
             folder = staged / folder_name
