@@ -1,0 +1,7 @@
+{
+  "gif_folder": "gifs",
+  "fps": 5,
+  "max_seconds": 3,
+  "max_width": 560,
+  "jpeg_quality": 79
+}
